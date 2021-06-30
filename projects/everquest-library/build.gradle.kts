@@ -1,6 +1,6 @@
 plugins {
     application
-    kotlin("multiplatform") version "1.5.10"
+    kotlin("multiplatform") version "1.5.20"
     id("maven-publish")
 }
 
@@ -39,22 +39,22 @@ kotlin {
     val hostOs = System.getProperty("os.name")
     val isMingwX64 = hostOs.startsWith("Windows")
     val nativeTarget = when {
-        hostOs == "Mac OS X" -> macosX64("native") {
-            binaries {
-                sharedLib {
-                    baseName = "native"
-                }
-            }
-        }
-        hostOs == "Linux" -> linuxX64("native") {
-            binaries {
-                sharedLib {
-                    baseName = "native"
-                }
-            }
-        }
+        hostOs == "Mac OS X" -> macosX64("native")
+        hostOs == "Linux" -> linuxX64("native")
         isMingwX64 -> mingwX64("native")
         else -> throw GradleException("Host OS is not supported in Kotlin/Native.")
+    }
+    nativeTarget.apply {
+        val main by compilations.getting
+        val interop by main.cinterops.creating
+        binaries {
+            sharedLib {
+                baseName = "native"
+            }
+            executable {
+                entryPoint = "main"
+            }
+        }
     }
 
     sourceSets {
