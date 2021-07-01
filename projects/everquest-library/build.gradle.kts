@@ -46,7 +46,10 @@ kotlin {
     }
     nativeTarget.apply {
         val main by compilations.getting
-        val interop by main.cinterops.creating
+        val interop by main.cinterops.creating{
+            defFile = project.file("src/nativeInterop/cinterop/lib.def")
+            includeDirs.allHeaders("src/nativeInterop/cinterop")
+        }
         binaries {
             sharedLib {
                 baseName = "native"

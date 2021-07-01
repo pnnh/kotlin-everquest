@@ -1,5 +1,5 @@
 import xyz.sfx.SayHello
-import interop.*
+import lib.*
 import kotlinx.cinterop.addressOf
 import kotlinx.cinterop.cstr
 import kotlinx.cinterop.toKString
